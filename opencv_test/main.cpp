@@ -7,9 +7,25 @@
 //
 
 #include <iostream>
+#include <stdio.h>
 
-int main(int argc, const char * argv[]) {
-    // insert code here...
-    std::cout << "Hello, World!\n";
-    return 0;
+#include "opencv2/imgproc.hpp"
+#include "opencv2/core.hpp"
+#include "opencv2/highgui.hpp"
+
+using namespace cv;
+using namespace std;
+
+int main(){
+    //   freopen("output.txt", "w", stdout);
+    VideoCapture cap(0);
+    //   Mat img;
+    // img = imread("img.png", IMREAD_COLOR);
+    namedWindow("Webcam");
+    while(true){
+         Mat Webcam;
+         cap.read(Webcam);
+         imshow("Webcam", Webcam);
+        waitKey(8);
+     }
 }

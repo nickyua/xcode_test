@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		11526D8E1E3FA6130061832D /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11526D8D1E3FA6130061832D /* main.cpp */; };
+		11526D971E3FA7740061832D /* libopencv_core.3.2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 11526D941E3FA7740061832D /* libopencv_core.3.2.0.dylib */; };
+		11526D981E3FA7740061832D /* libopencv_highgui.3.2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 11526D951E3FA7740061832D /* libopencv_highgui.3.2.0.dylib */; };
+		11526D991E3FA7740061832D /* libopencv_imgproc.3.2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 11526D961E3FA7740061832D /* libopencv_imgproc.3.2.0.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +28,10 @@
 /* Begin PBXFileReference section */
 		11526D8A1E3FA6130061832D /* opencv_test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = opencv_test; sourceTree = BUILT_PRODUCTS_DIR; };
 		11526D8D1E3FA6130061832D /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		11526D941E3FA7740061832D /* libopencv_core.3.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_core.3.2.0.dylib; path = ../../../../Documents/OpenCV/build/lib/libopencv_core.3.2.0.dylib; sourceTree = "<group>"; };
+		11526D951E3FA7740061832D /* libopencv_highgui.3.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_highgui.3.2.0.dylib; path = ../../../../Documents/OpenCV/build/lib/libopencv_highgui.3.2.0.dylib; sourceTree = "<group>"; };
+		11526D961E3FA7740061832D /* libopencv_imgproc.3.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_imgproc.3.2.0.dylib; path = ../../../../Documents/OpenCV/build/lib/libopencv_imgproc.3.2.0.dylib; sourceTree = "<group>"; };
+		11526D9A1E3FAA860061832D /* img.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = img.png; path = ../../../../../Downloads/img.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +39,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				11526D991E3FA7740061832D /* libopencv_imgproc.3.2.0.dylib in Frameworks */,
+				11526D981E3FA7740061832D /* libopencv_highgui.3.2.0.dylib in Frameworks */,
+				11526D971E3FA7740061832D /* libopencv_core.3.2.0.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -41,6 +51,9 @@
 		11526D811E3FA6130061832D = {
 			isa = PBXGroup;
 			children = (
+				11526D941E3FA7740061832D /* libopencv_core.3.2.0.dylib */,
+				11526D951E3FA7740061832D /* libopencv_highgui.3.2.0.dylib */,
+				11526D961E3FA7740061832D /* libopencv_imgproc.3.2.0.dylib */,
 				11526D8C1E3FA6130061832D /* opencv_test */,
 				11526D8B1E3FA6130061832D /* Products */,
 			);
@@ -57,6 +70,7 @@
 		11526D8C1E3FA6130061832D /* opencv_test */ = {
 			isa = PBXGroup;
 			children = (
+				11526D9A1E3FAA860061832D /* img.png */,
 				11526D8D1E3FA6130061832D /* main.cpp */,
 			);
 			path = opencv_test;
@@ -217,7 +231,28 @@
 		11526D921E3FA6130061832D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				DEVELOPMENT_TEAM = DB59B2HPSP;
+				HEADER_SEARCH_PATHS = /usr/local/include;
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				OTHER_LDFLAGS = (
+					"-lopencv_calib3d",
+					"-lopencv_core",
+					"-lopencv_features2d",
+					"-lopencv_flann",
+					"-lopencv_highgui",
+					"-lopencv_imgcodecs",
+					"-lopencv_imgproc",
+					"-lopencv_ml",
+					"-lopencv_objdetect",
+					"-lopencv_photo",
+					"-lopencv_shape",
+					"-lopencv_stitching",
+					"-lopencv_superres",
+					"-lopencv_video",
+					"-lopencv_videoio",
+					"-lopencv_videostab",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -225,7 +260,28 @@
 		11526D931E3FA6130061832D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				DEVELOPMENT_TEAM = DB59B2HPSP;
+				HEADER_SEARCH_PATHS = /usr/local/include;
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				OTHER_LDFLAGS = (
+					"-lopencv_calib3d",
+					"-lopencv_core",
+					"-lopencv_features2d",
+					"-lopencv_flann",
+					"-lopencv_highgui",
+					"-lopencv_imgcodecs",
+					"-lopencv_imgproc",
+					"-lopencv_ml",
+					"-lopencv_objdetect",
+					"-lopencv_photo",
+					"-lopencv_shape",
+					"-lopencv_stitching",
+					"-lopencv_superres",
+					"-lopencv_video",
+					"-lopencv_videoio",
+					"-lopencv_videostab",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
