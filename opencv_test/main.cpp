@@ -15,33 +15,23 @@ int main(int argc, char** argv)
     freopen("input.txt", "r", stdin);
     freopen("output.txt", "w", stdout);
     std::setprecision(7);
-    //   if (argc < 2)
-    //{
-    //    cout << " Usage: display_image ImageToLoadAndDisplay" << endl;
-    //    waitKey(0); // Wait for a keystroke in the window
-    //    system("pause");
-    //    return -1;
-    //}
-    //test();
-    //	int num;
-    //	cin >> num;
-    //	readVideoFromWebCamera();
+
     readImage(g_filename);
     
-    //	readVideoWithSlidebar(argv[num]);
-    //	example2_4(argv[1]);
-    //  system("pause");
-    waitKey(0);
-    
+    // waitKey(0);
     return 0;
 }
 
-void readImage(char *filename)
+void readImage(string filename)
 {
     int start = int(clock());
+    ////// if you want to convert image from color to grayscale image right now
     //    Mat img = imread(filename, CV_LOAD_IMAGE_GRAYSCALE);
+    
+    // if you want to read and save color image
     Mat img = imread(filename, 1);
-    //	Mat dst(img.size(), CV_32FC1);
+    
+    
     if (!img.data)
     {
         cout << "Couldn't open or find image\n";
@@ -51,125 +41,31 @@ void readImage(char *filename)
     
     // Showing the result
     
+    
+    //opencv harriss detector
     // buildinHarrisDetector(img);
+
+    // my harris detector
     harrisEdgeDetector(img);
     
+    
     int finish = int(clock());
-    cout << finish - start << " miliseconds" << endl;
+    cout << (finish - start) / float(CLOCKS_PER_SEC) << " seconds" << endl;
     
     waitKey(0);
     destroyAllWindows();
 }
 
-void readVideo(char *filename)
-{
-    namedWindow("Example2", WINDOW_AUTOSIZE);
-    VideoCapture capture;
-    capture.open(string(filename));
-    Mat frame;
-    while (1)
-    {
-        capture >> frame;
-        if (!frame.data) break;
-        imshow("Example2", frame);
-        char c = waitKey(33);
-        if (c >= 0) break;
-    }
-    waitKey();
-    destroyWindow("Example2");
-}
-
-void onTrackbarSlide(int pos, void*)
-{
-    g_capture.set(CAP_PROP_POS_FRAMES, pos);
-    if (!g_dontset)
-        g_run = 1;
-    g_dontset = 1;
-    
-}
-
-void readVideoWithSlidebar(char *filename)//with canny filters
-{
-    namedWindow("Example3", WINDOW_AUTOSIZE);
-    g_capture.open(string(filename));// = cvCreateFileCapture(filename);
-    
-    int frames = (int) g_capture.get(CAP_PROP_FRAME_COUNT);
-    int tmpw = (int)g_capture.get(CAP_PROP_FRAME_WIDTH);
-    int tmph = (int)g_capture.get(CAP_PROP_FRAME_WIDTH);
-    cout << "Video has " << frames << " frames of dimensions("
-    << tmpw << ", " << tmph << ")." << endl;
-    createTrackbar("Position", "Example3", &g_slider_position, frames, onTrackbarSlide);
-    
-    Mat frame;
-    
-    while (1)
-    {
-        if (g_run != 0)
-        {
-            g_capture >> frame;
-            if (!frame.data) break;
-            Mat out;
-            cvtColor(frame, out, COLOR_BGR2GRAY);
-            Canny(out, frame, 10, 100, 3, true);
-            imshow("Example3", frame);
-            g_run -= 1;
-        }
-        char c = (char)waitKey(10);
-        if (c == 's')
-        {
-            g_run = 1;
-            cout << "Single step, run = " << g_run << endl;
-        }
-        
-        if (c == 'r')
-        {
-            g_run = -1;
-            cout << "Run mode, run = " << g_run << endl;
-        }
-        if (c == 27) break;
-    }
-    cvWaitKey();
-    cvDestroyWindow("Example3");
-}
-
-void readVideoFromWebCamera()
-{
-    VideoCapture cap;
-    cap.open(0);
-    if (!cap.isOpened())
-    {
-        std::cerr << "couldn't open capture" << endl;
-    }
-    namedWindow("Example", WINDOW_AUTOSIZE);
-    namedWindow("Example1", WINDOW_AUTOSIZE);
-    Mat frame;
-    while (1)
-    {
-        cap >> frame;
-        Vec3b p = frame.at<Vec3b>(0, 0);
-        if (!frame.data) break;
-        Mat img;
-        //		GaussianBlur(frame, img, Size(15, 15), 30);
-        //		Mat grayImage(frame.size(), CV_8UC1);
-        //		cvtColor(frame, grayImage, CV_RGB2GRAY);
-        
-        harrisEdgeDetector(frame);
-        
-        imshow("Example", frame);
-        int milliseconds = 40;
-        if (waitKey(30) >= 0) break;
-    }
-    destroyWindow("Example");
-}
-
 void harrisEdgeDetector(Mat &image)
 {
-    namedWindow("Example1", WINDOW_AUTOSIZE);
-    namedWindow("Example3", WINDOW_AUTOSIZE);
+    namedWindow("Result window", WINDOW_AUTOSIZE);
+    namedWindow("Derivative window", WINDOW_AUTOSIZE);
     
-    Mat grayImage(image.size(), CV_8UC1);
-    Mat grayImage1(image.size(), CV_8UC1);
+    Mat grayImage(image.size(), CV_8UC1); // gray scale image from Mat &image
+    Mat grayImage1(image.size(), CV_8UC1); //gray scale image from Mat &image with gaussian blur
     
+    
+    //convert to gray scale if in image 3 channels and copy if 1
     if (image.channels() == 3)
     {
         cvtColor(image, grayImage, CV_BGR2GRAY);
@@ -179,18 +75,20 @@ void harrisEdgeDetector(Mat &image)
         grayImage = image;
     }
     
+    
+    // apply gaussian blur to gray scale image
     GaussianBlur(grayImage, grayImage1, Size(5, 5), 1.5, 1.5);
     
+    
     pair<int, int> imsize = make_pair(image.size().height, image.size().width);
-    
+    cout << "Size of image: " << imsize.X << " " << imsize.Y << endl;
     Mat L(image.size(), CV_8UC1);
-    i_Matrix v_Gx(imsize.X, vector<int>(imsize.Y, 0));
-    i_Matrix v_Gy(imsize.X, vector<int>(imsize.Y, 0));
-    i_Matrix v_Gxy(imsize.X, vector<int>(imsize.Y, 0));
     
+    //derivative by x, y and xy
     Mat Gx(image.size(), CV_32FC1);
     Mat Gy(image.size(), CV_32FC1);
     Mat Gxy(image.size(), CV_32FC1);
+    
     //compute derivatives
     for (int i = 0;i < imsize.X; i++)
     {
@@ -198,6 +96,8 @@ void harrisEdgeDetector(Mat &image)
         {
             if (i == 0 || j == 0 || i == imsize.X - 1 || j == imsize.Y - 1)
             {
+                //if border then derivative to 0
+                //i-th row, j-th column
                 Gx.at<float>(i, j) = 0;
                 Gy.at<float>(i, j) = 0;
                 Gxy.at<float>(i, j) = 0;
@@ -223,20 +123,24 @@ void harrisEdgeDetector(Mat &image)
                 Gy.at<float>(i, j) = k * k;
                 Gx.at<float>(i, j) = v * v;
                 Gxy.at<float>(i, j) = k * v;
-                if (k*k > 1500000 || v*v > 1500000 || k*v > 1500000)
-                {
-                    cout << i << " " << j << " " << k * k << " " << v * v << endl;
-                }
+                
+                //if (k*k > 1500000 || v*v > 1500000 || k*v > 1500000)
+                //{
+                //    cout << i << " " << j << " " << k * k << " " << v * v << endl;
+                //}
             }
         }
     }
     
-    
+    //derivatives with gaussian blur
     Mat gx, gy, gxy;
     
+    //apply gaussian blur to derivative
     GaussianBlur(Gx, gx, Size(5, 5), 1.5, 1.5);
     GaussianBlur(Gy, gy, Size(5, 5), 1.5, 1.5);
     GaussianBlur(Gxy, gxy, Size(5, 5), 1.5, 1.5);
+    
+    //callback matrix for harris detector
     ld_Matrix L1(imsize.X, vector<ld>(imsize.Y, 0));
     
     //compute matrix H^sp
@@ -255,10 +159,11 @@ void harrisEdgeDetector(Mat &image)
     i_Matrix thresholdMatrix(L1.size(), vector<int>(L1[0].size(), 0));
     i_Matrix L2 = scale(L1);
     L =matrix2img(L2);
-    imshow("Example3", L);
+    imshow("Derivative window", L);
     
     int maxL = 255;//findMax(L2);
-    map<int, int> points;
+    
+    map<int, int> points; // points with high callback
     for (int i = 0;i < imsize.X; i++)
     {
         for (int j = 0;j < imsize.Y; j++)
@@ -271,25 +176,16 @@ void harrisEdgeDetector(Mat &image)
         }
     }
     
-    //	i_Matrix x = regionalMax(thresholdMatrix);
-    //	i_Matrix x = simpleRegionalMax(bbb);
     int start = int(clock());
-    printf("Amount points to fastRegionalMax: %d\n", points.size());
+    printf("Amount points to fastRegionalMax: %d\n", int(points.size()));
     Size ssize = image.size();
-    set<int> y = fastRegionalMax(points, ssize);
+    
+    
+    set<int> y = fastRegionalMax(points, ssize); // set of imterest points
     int finish = int(clock());
     printf("Time fastRegionalMax: %d\n", finish - start);
-    printf("Amount interest points: %d\n", y.size());
-    //for (int i = 0;i < imsize.X; i++)
-    //{
-    //	for (int j = 0;j < imsize.Y; j++)
-    //	{
-    //		if (x[i][j])
-    //		{
-    //			circle(image, Point(j, i), 5, Scalar(0, 0, 255), 2, 8, 0);
-    //		}
-    //	}
-    //}
+    printf("Amount interest points: %d\n", int(y.size()));
+    
     
     for (set<int>::iterator it = y.begin(); it != y.end(); it++)
     {
@@ -299,15 +195,15 @@ void harrisEdgeDetector(Mat &image)
         circle(image, Point(col, row), 5, Scalar(0, 0, 255), 2, 8, 0);
     }
     
-    imshow("Example1", image);
+    imshow("Result window", image);
 }
 
 //regionalMax in vicinity range*range
 i_Matrix simpleRegionalMax(i_Matrix &a, int range)
 {
     i_Matrix res(a.size(), vector<int>(a[0].size(), 0));
-    int height = a.size();
-    int width = a[0].size();
+    int height = int(a.size());
+    int width = int(a[0].size());
     
     for (int i = 0;i < height; i++)
     {
@@ -340,8 +236,8 @@ i_Matrix simpleRegionalMax(i_Matrix &a, int range)
 i_Matrix regionalMax(i_Matrix &a)
 {
     i_Matrix res(a.size(), vector<int>(a[0].size(), 0));
-    int height = a.size();
-    int width = a[0].size();
+    int height = int(a.size());
+    int width = int(a[0].size());
     //uchar *data = a.data;
     vector<uchar> values(height * width);
     init_sets(height * width);
@@ -359,7 +255,7 @@ i_Matrix regionalMax(i_Matrix &a)
                 int newi = i + points[k].X;
                 int newj = j + points[k].Y;
                 if (newi < 0 || newj < 0) continue;
-                int nv = a[i + points[k].X][ j + points[k].Y];
+                //int nv = a[i + points[k].X][ j + points[k].Y];
                 if (a[i + points[k].X][ j + points[k].Y] == values[i * width + j])
                 {
                     union_sets(i * width + j, (i + points[k].X) * width + j + points[k].Y);
@@ -470,7 +366,7 @@ set<int> fastRegionalMax(map<int, int> &_a, Size &sz)
     
     map<int, int> map_parent;
     vector<uchar> values(_a.size(), 0);
-    init_sets(_a.size());
+    init_sets(int(_a.size()));
     
     int index = 0;
     for (map<int, int>::iterator it = _a.begin(); it != _a.end(); it++)
@@ -596,44 +492,6 @@ void init_sets(int n)
     }
 }
 
-//function to test regionalMax
-void test()
-{
-    freopen("input.txt", "r", stdin);
-    freopen("output.txt", "w", stdout);
-    int n, m;
-    scanf("%d %d", &n, &m);
-    Mat testim(Size(m, n), CV_8UC1);
-    
-    for (int i = 0;i < n; i++)
-    {
-        for (int j =0 ;j < m; j++)
-        {
-            int v;
-            scanf("%d", &v);
-            testim.at<uchar>(i, j) = uchar(v);
-        }
-    }
-    //	cout << testim << endl<<endl;
-    for (int i = 0;i < n; i++)
-    {
-        for (int j = 0;j < m; j++)
-        {
-            printf("%d ", int(testim.at<uchar>((i)%n, (j)%m)));
-        }
-        printf("\n");
-    }
-    printf("\n\n\n");
-    //Matrix res = regionalMax(testim);
-    //for (int i = 0;i < res.size(); i++)
-    //{
-    //	for (int j = 0;j < res[i]. size(); j++)
-    //	{
-    //		printf ("%d ", res[i][j]);
-    //	}
-    //	printf("\n");
-    //}
-}
 
 void print_matrix(i_Matrix &a)
 {
@@ -682,7 +540,7 @@ i_Matrix scale(ld_Matrix &a, int minv, int maxv)
 
 Mat matrix2img(i_Matrix &a)
 {
-    Mat res(Size( a[0].size(), a.size()), CV_8UC1);
+    Mat res(Size( int(a[0].size()), int(a.size())), CV_8UC1);
     
     for (int i = 0;i < a.size(); i++)
     {
@@ -785,7 +643,7 @@ void buildinHarrisDetector(Mat &img)
 void print_image(Mat &a){
     for (int i = 0;i < a.rows; i++){
         for (int j = 0;j < a.cols; j++){
-            printf("%f ", a.at<float>(j, i));
+            printf("%f ", a.at<float>(i, j));
         }
         printf("\n");
     }

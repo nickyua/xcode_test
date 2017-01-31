@@ -50,7 +50,7 @@ typedef vector<vector<ld>> ld_Matrix;
 
 const ll pInf = ll(1e9);
 
-void readImage(char *filename);
+void readImage(string filename);
 void readVideo(char *filename);
 void readVideoWithSlidebar(char *filename);
 void readVideoFromWebCamera();

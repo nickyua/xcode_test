@@ -1,0 +1,6 @@
+Size of image: 875 800
+MaxA = 5.33038e+06
+Amount points to fastRegionalMax: 3
+Time fastRegionalMax: 185
+Amount interest points: 1
+0.186409 seconds
