@@ -3,7 +3,7 @@
 //  opencv_test
 //
 //  Created by Nikita on 1/30/17.
-//  Copyright © 2017 NotaBene. All rights reserved.
+//  Copyright © 2017 Nikita Bakunov. All rights reserved.
 //
 
 //#include <opencv2/core.hpp>
