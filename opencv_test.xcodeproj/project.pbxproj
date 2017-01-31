@@ -32,6 +32,8 @@
 		11526D951E3FA7740061832D /* libopencv_highgui.3.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_highgui.3.2.0.dylib; path = ../../../../Documents/OpenCV/build/lib/libopencv_highgui.3.2.0.dylib; sourceTree = "<group>"; };
 		11526D961E3FA7740061832D /* libopencv_imgproc.3.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_imgproc.3.2.0.dylib; path = ../../../../Documents/OpenCV/build/lib/libopencv_imgproc.3.2.0.dylib; sourceTree = "<group>"; };
 		11526D9A1E3FAA860061832D /* img.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = img.png; path = ../../../../../Downloads/img.png; sourceTree = "<group>"; };
+		11526D9B1E40A5BB0061832D /* Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Header.h; sourceTree = "<group>"; };
+		11526D9C1E40B0D60061832D /* output.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = output.txt; path = build/Debug/output.txt; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,8 +72,10 @@
 		11526D8C1E3FA6130061832D /* opencv_test */ = {
 			isa = PBXGroup;
 			children = (
+				11526D9C1E40B0D60061832D /* output.txt */,
 				11526D9A1E3FAA860061832D /* img.png */,
 				11526D8D1E3FA6130061832D /* main.cpp */,
+				11526D9B1E40A5BB0061832D /* Header.h */,
 			);
 			path = opencv_test;
 			sourceTree = "<group>";
